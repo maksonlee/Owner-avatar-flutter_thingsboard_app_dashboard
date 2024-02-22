@@ -101,20 +101,17 @@ class _DashboardState extends TbContextState<Dashboard> {
 
   late final DashboardController _dashboardController;
 
-  InAppWebViewGroupOptions options = InAppWebViewGroupOptions(
-      crossPlatform: InAppWebViewOptions(
-        useShouldOverrideUrlLoading: true,
-        mediaPlaybackRequiresUserGesture: false,
-        javaScriptEnabled: true,
-        cacheEnabled: true,
-        supportZoom: false,
-        // useOnDownloadStart: true
-      ),
-      android: AndroidInAppWebViewOptions(
-          useHybridComposition: true, thirdPartyCookiesEnabled: true),
-      ios: IOSInAppWebViewOptions(
-          allowsInlineMediaPlayback: true,
-          allowsBackForwardNavigationGestures: false));
+  InAppWebViewSettings settings = InAppWebViewSettings(
+    useShouldOverrideUrlLoading: true,
+    mediaPlaybackRequiresUserGesture: false,
+    javaScriptEnabled: true,
+    cacheEnabled: true,
+    supportZoom: false,
+    useHybridComposition: true,
+    thirdPartyCookiesEnabled: true,
+    allowsInlineMediaPlayback: true,
+    allowsBackForwardNavigationGestures: false,
+  );
 
   late Uri _initialUrl;
 
@@ -150,7 +147,7 @@ class _DashboardState extends TbContextState<Dashboard> {
           var controller = await _controller.future;
           await controller.postWebMessage(
               message: WebMessage(data: jsonEncode(windowMessage)),
-              targetOrigin: Uri.parse('*'));
+              targetOrigin: WebUri.uri(Uri.parse('*')));
         }
       }
     }
@@ -214,8 +211,8 @@ class _DashboardState extends TbContextState<Dashboard> {
     }
     var webMessage = WebMessage(data: jsonEncode(windowMessage));
     if (!UniversalPlatform.isWeb) {
-      await controller!
-          .postWebMessage(message: webMessage, targetOrigin: Uri.parse('*'));
+      await controller!.postWebMessage(
+          message: webMessage, targetOrigin: WebUri.uri(Uri.parse('*')));
     }
   }
 
@@ -224,7 +221,7 @@ class _DashboardState extends TbContextState<Dashboard> {
     var windowMessage = <String, dynamic>{'type': 'toggleDashboardLayout'};
     var webMessage = WebMessage(data: jsonEncode(windowMessage));
     await controller.postWebMessage(
-        message: webMessage, targetOrigin: Uri.parse('*'));
+        message: webMessage, targetOrigin: WebUri.uri(Uri.parse('*')));
   }
 
   Future<void> tryLocalNavigation(String? path) async {
@@ -280,8 +277,9 @@ class _DashboardState extends TbContextState<Dashboard> {
                       ? Center(child: Text('Not implemented!'))
                       : InAppWebView(
                           key: webViewKey,
-                          initialUrlRequest: URLRequest(url: _initialUrl),
-                          initialOptions: options,
+                          initialUrlRequest:
+                              URLRequest(url: WebUri.uri(_initialUrl)),
+                          initialSettings: settings,
                           onWebViewCreated: (webViewController) {
                             log.debug("onWebViewCreated");
                             webViewController.addJavaScriptHandler(
@@ -350,8 +348,8 @@ class _DashboardState extends TbContextState<Dashboard> {
                             log.debug('shouldOverrideUrlLoading $uriString');
                             if (Platform.isAndroid ||
                                 Platform.isIOS &&
-                                    navigationAction.iosWKNavigationType ==
-                                        IOSWKNavigationType.LINK_ACTIVATED) {
+                                    navigationAction.navigationType ==
+                                        NavigationType.LINK_ACTIVATED) {
                               if (uriString.startsWith(ThingsboardAppConstants
                                   .thingsBoardApiEndpoint)) {
                                 var target = uriString.substring(
@@ -395,13 +393,12 @@ class _DashboardState extends TbContextState<Dashboard> {
                               _controller.complete(controller);
                             }
                           },
-                          androidOnPermissionRequest:
-                              (controller, origin, resources) async {
+                          onPermissionRequest: (controller, request) async {
                             log.debug(
-                                'androidOnPermissionRequest origin: $origin, resources: $resources');
-                            return PermissionRequestResponse(
-                                resources: resources,
-                                action: PermissionRequestResponseAction.GRANT);
+                                'androidOnPermissionRequest origin: ${request.origin}, resources: ${request.resources}');
+                            return PermissionResponse(
+                                resources: request.resources,
+                                action: PermissionResponseAction.GRANT);
                           },
                         ),
                   if (!UniversalPlatform.isWeb)

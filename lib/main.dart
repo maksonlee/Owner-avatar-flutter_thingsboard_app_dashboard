@@ -20,7 +20,7 @@ void main() async {
 //  await Permission.storage.request();
 
   if (UniversalPlatform.isAndroid) {
-    await AndroidInAppWebViewController.setWebContentsDebuggingEnabled(true);
+    await InAppWebViewController.setWebContentsDebuggingEnabled(true);
   }
 
   runApp(ThingsboardApp());
