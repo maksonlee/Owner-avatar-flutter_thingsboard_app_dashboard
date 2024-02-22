@@ -12,7 +12,6 @@ import 'package:thingsboard_app/modules/device/device_routes.dart';
 import 'package:thingsboard_app/modules/home/home_routes.dart';
 import 'package:thingsboard_app/modules/profile/profile_routes.dart';
 import 'package:thingsboard_app/modules/tenant/tenant_routes.dart';
-import 'package:thingsboard_app/utils/ui_utils_routes.dart';
 
 class ThingsboardAppRouter {
   final router = FluroRouter();
@@ -29,7 +28,6 @@ class ThingsboardAppRouter {
     });
     InitRoutes(_tbContext).registerRoutes();
     AuthRoutes(_tbContext).registerRoutes();
-    UiUtilsRoutes(_tbContext).registerRoutes();
     HomeRoutes(_tbContext).registerRoutes();
     ProfileRoutes(_tbContext).registerRoutes();
     AssetRoutes(_tbContext).registerRoutes();

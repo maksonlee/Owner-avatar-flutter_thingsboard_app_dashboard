@@ -1,11 +1,9 @@
 import 'dart:io';
-import 'package:fluro/fluro.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:thingsboard_app/core/context/tb_context.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -48,10 +46,6 @@ class MobileActionResult {
     return _ImageResult(imageUrl);
   }
 
-  factory MobileActionResult.qrCode(String code, String format) {
-    return _QrCodeResult(code, format);
-  }
-
   factory MobileActionResult.location(num latitude, num longitude) {
     return _LocationResult(latitude, longitude);
   }
@@ -86,20 +80,6 @@ class _ImageResult extends MobileActionResult {
   }
 }
 
-class _QrCodeResult extends MobileActionResult {
-  String code;
-  String format;
-  _QrCodeResult(this.code, this.format);
-
-  @override
-  Map<String, dynamic> toJson() {
-    var json = super.toJson();
-    json['code'] = code;
-    json['format'] = format;
-    return json;
-  }
-}
-
 class _LocationResult extends MobileActionResult {
   num latitude;
   num longitude;
@@ -119,7 +99,6 @@ enum WidgetMobileActionType {
   takePhoto,
   mapDirection,
   mapLocation,
-  scanQrCode,
   makePhoneCall,
   getLocation,
   takeScreenshot,
@@ -156,8 +135,6 @@ class WidgetActionHandler with HasTbContext {
           return await _launchMap(args, true);
         case WidgetMobileActionType.mapLocation:
           return await _launchMap(args, false);
-        case WidgetMobileActionType.scanQrCode:
-          return await _scanQrCode();
         case WidgetMobileActionType.makePhoneCall:
           return await _makePhoneCall(args);
         case WidgetMobileActionType.getLocation:
@@ -216,21 +193,6 @@ class WidgetActionHandler with HasTbContext {
           ? 'dir/?api=1&destination=$lat,$lon'
           : 'search/?api=1&query=$lat,$lon';
       return WidgetMobileActionResult.successResult(await _tryLaunch(url));
-    } catch (e) {
-      return _handleError(e);
-    }
-  }
-
-  Future<WidgetMobileActionResult> _scanQrCode() async {
-    try {
-      Barcode? barcode = await tbContext.navigateTo('/qrCodeScan',
-          transition: TransitionType.nativeModal);
-      if (barcode != null && barcode.code != null) {
-        return WidgetMobileActionResult.successResult(MobileActionResult.qrCode(
-            barcode.code!, barcode.format.toString()));
-      } else {
-        return WidgetMobileActionResult.emptyResult();
-      }
     } catch (e) {
       return _handleError(e);
     }
