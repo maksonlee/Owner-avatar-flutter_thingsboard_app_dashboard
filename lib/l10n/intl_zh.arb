@@ -7,7 +7,7 @@
   "more": "更多",
 
   "customers": "客户",
-  "asserts": "资产",
+  "assets": "资产",
   "auditLogs": "审计报告",
   "logout": "登出",
   "login": "登录",
@@ -26,9 +26,9 @@
   "requestPasswordReset": "要求重置密码",
   "passwordResetLinkSuccessfullySentNotification": "密码重置链接已发送",
 
-  "OR": "或",
-  "No": "否",
-  "Yes": "是",
+  "or": "或",
+  "no": "否",
+  "yes": "是",
 
   "title": "标题",
   "country": "国家",

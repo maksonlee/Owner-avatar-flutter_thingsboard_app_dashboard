@@ -10,7 +10,7 @@ import 'package:thingsboard_app/modules/dashboard/main_dashboard_page.dart';
 import 'package:thingsboard_app/widgets/two_page_view.dart';
 
 import 'config/themes/tb_theme.dart';
-import 'generated/l10n.dart';
+import 'package:flutter_gen/gen_l10n/messages.dart';
 
 final appRouter = ThingsboardAppRouter();
 
@@ -139,7 +139,7 @@ class ThingsboardAppState extends State<ThingsboardApp>
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
         ],
-        supportedLocales: S.delegate.supportedLocales,
+        supportedLocales: S.supportedLocales,
         onGenerateTitle: (BuildContext context) => S.of(context).appTitle,
         themeMode: ThemeMode.light,
         home: TwoPageView(
@@ -153,7 +153,7 @@ class ThingsboardAppState extends State<ThingsboardApp>
                 GlobalWidgetsLocalizations.delegate,
                 GlobalCupertinoLocalizations.delegate,
               ],
-              supportedLocales: S.delegate.supportedLocales,
+              supportedLocales: S.supportedLocales,
               onGenerateTitle: (BuildContext context) => S.of(context).appTitle,
               theme: tbTheme,
               themeMode: ThemeMode.light,
@@ -170,7 +170,7 @@ class ThingsboardAppState extends State<ThingsboardApp>
                 GlobalWidgetsLocalizations.delegate,
                 GlobalCupertinoLocalizations.delegate,
               ],
-              supportedLocales: S.delegate.supportedLocales,
+              supportedLocales: S.supportedLocales,
               onGenerateTitle: (BuildContext context) => S.of(context).appTitle,
               theme: tbTheme,
               themeMode: ThemeMode.light,
