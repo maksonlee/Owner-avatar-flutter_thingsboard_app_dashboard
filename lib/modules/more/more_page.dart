@@ -164,45 +164,6 @@ class MoreMenuItem {
 
   static List<MoreMenuItem> getItems(
       TbContext tbContext, BuildContext context) {
-    if (tbContext.isAuthenticated) {
-      List<MoreMenuItem> items = [];
-      switch (tbContext.tbClient.getAuthUser()!.authority) {
-        case Authority.SYS_ADMIN:
-          break;
-        case Authority.TENANT_ADMIN:
-          items.addAll([
-            MoreMenuItem(
-                title: '${S.of(context).customers}',
-                icon: Icons.supervisor_account,
-                path: '/customers'),
-            MoreMenuItem(
-                title: '${S.of(context).assets}',
-                icon: Icons.domain,
-                path: '/assets'),
-            MoreMenuItem(
-                title: '${S.of(context).auditLogs}',
-                icon: Icons.track_changes,
-                path: '/auditLogs')
-          ]);
-          break;
-        case Authority.CUSTOMER_USER:
-          items.addAll([
-            MoreMenuItem(
-                title: '${S.of(context).assets}',
-                icon: Icons.domain,
-                path: '/assets')
-          ]);
-          break;
-        case Authority.REFRESH_TOKEN:
-          break;
-        case Authority.ANONYMOUS:
-          break;
-        case Authority.PRE_VERIFICATION_TOKEN:
-          break;
-      }
-      return items;
-    } else {
-      return [];
-    }
+    return [];
   }
 }

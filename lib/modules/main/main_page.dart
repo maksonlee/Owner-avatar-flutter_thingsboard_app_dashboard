@@ -3,7 +3,6 @@ import 'package:thingsboard_app/core/context/tb_context.dart';
 import 'package:thingsboard_app/core/context/tb_context_widget.dart';
 import 'package:thingsboard_app/generated/l10n.dart';
 import 'package:thingsboard_app/modules/alarm/alarms_page.dart';
-import 'package:thingsboard_app/modules/device/devices_main_page.dart';
 import 'package:thingsboard_app/modules/home/home_page.dart';
 import 'package:thingsboard_app/modules/more/more_page.dart';
 import 'package:thingsboard_client/thingsboard_client.dart';
@@ -22,10 +21,8 @@ class TbMainNavigationItem {
 
   static Map<Authority, Set<String>> mainPageStateMap = {
     Authority.SYS_ADMIN: Set.unmodifiable(['/home', '/more']),
-    Authority.TENANT_ADMIN:
-        Set.unmodifiable(['/home', '/alarms', '/devices', '/more']),
-    Authority.CUSTOMER_USER:
-        Set.unmodifiable(['/home', '/alarms', '/devices', '/more']),
+    Authority.TENANT_ADMIN: Set.unmodifiable(['/home', '/alarms', '/more']),
+    Authority.CUSTOMER_USER: Set.unmodifiable(['/home', '/alarms', '/more']),
   };
 
   static bool isMainPageState(TbContext tbContext, String path) {
@@ -56,12 +53,7 @@ class TbMainNavigationItem {
                 page: AlarmsPage(tbContext),
                 title: 'Alarms',
                 icon: Icon(Icons.notifications),
-                path: '/alarms'),
-            TbMainNavigationItem(
-                page: DevicesMainPage(tbContext),
-                title: 'Devices',
-                icon: Icon(Icons.devices_other),
-                path: '/devices')
+                path: '/alarms')
           ]);
           break;
         case Authority.REFRESH_TOKEN:
@@ -91,9 +83,6 @@ class TbMainNavigationItem {
           break;
         case '/alarms':
           item.title = '${S.of(context).alarms}';
-          break;
-        case '/devices':
-          item.title = '${S.of(context).devices}';
           break;
         case '/more':
           item.title = '${S.of(context).more}';

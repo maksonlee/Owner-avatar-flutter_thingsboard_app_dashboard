@@ -228,24 +228,14 @@ class _DashboardState extends TbContextState<Dashboard> {
     log.debug("path: $path");
     if (path != null) {
       var parts = path.split("/");
-      if ([
-        'profile',
-        'devices',
-        'assets',
-        'dashboards',
-        'dashboard',
-        'customers',
-        'auditLogs'
-      ].contains(parts[0])) {
+      if (['profile', 'devices', 'dashboards', 'dashboard']
+          .contains(parts[0])) {
         if ((parts[0] == 'dashboard' || parts[0] == 'dashboards') &&
             parts.length > 1) {
           var dashboardId = parts[1];
           await navigateToDashboard(dashboardId);
         } else if (parts[0] != 'dashboard') {
           var targetPath = '/$path';
-          if (parts[0] == 'devices' && widget._home != true) {
-            targetPath = '/devicesPage';
-          }
           await navigateTo(targetPath);
         }
       }
